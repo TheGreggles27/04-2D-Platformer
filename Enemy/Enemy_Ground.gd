@@ -2,14 +2,22 @@ extends KinematicBody2D
 
 export var speed = 2
 export var damage = 10
+export var max_constraint = 1375
+export var min_constraint = 875
 var direction = 1
 var velocity = Vector2.ZERO
 
-func _physics_process(delta):
-	if direction < 0 and $Sprite.flip_h:
+func _physics_process(_delta):
+	if direction < 0 and !$Sprite.flip_h:
 		$Sprite.flip_h = true
 	if direction > 0 and $Sprite.flip_h:
 		$Sprite.flip_h = false
+	if direction > 0 and position.x >= max_constraint:
+		velocity.x = 0
+		direction = -1
+	if direction < 0 and position.x <= min_constraint:
+		velocity.x = 0
+		direction = 1
 		
 	velocity.x += direction * speed
 	move_and_slide_with_snap(velocity, Vector2.UP)
